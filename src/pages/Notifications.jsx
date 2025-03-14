@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchNotifications } from "../services/api"; // ✅ Se corrige la importación
+import { fetchNotifications } from "../services/api"; // ✅ Importación corregida
 
 function Notifications() {
     const [notifications, setNotifications] = useState([]);
@@ -23,9 +23,13 @@ function Notifications() {
         <div>
             <h1>Notificaciones</h1>
             <ul>
-                {notifications.map((notification, index) => (
-                    <li key={index}>{notification.message}</li>
-                ))}
+                {notifications.length > 0 ? (
+                    notifications.map((notification, index) => (
+                        <li key={index}>{notification.message}</li>
+                    ))
+                ) : (
+                    <p>No hay notificaciones disponibles.</p>
+                )}
             </ul>
         </div>
     );

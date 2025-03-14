@@ -1,45 +1,23 @@
-const API_BASE_URL = "https://backend-cablespace.onrender.com/api"; // URL del backend en Render
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://backend-cablespace.onrender.com"; // Ajustar según tu backend
 
-export const fetchProducts = async () => {
+export async function fetchNotifications() {
     try {
-        const response = await fetch(`${API_BASE_URL}/products`);
-        if (!response.ok) throw new Error("Error al obtener los productos");
+        const response = await fetch(`${API_BASE_URL}/api/notifications`);
+        if (!response.ok) throw new Error("Error al obtener notificaciones");
         return await response.json();
     } catch (error) {
-        console.error(error);
+        console.error("Error en fetchNotifications:", error);
         return [];
     }
-};
+}
 
-export const fetchProductById = async (id) => {
+export async function fetchProducts() {
     try {
-        const response = await fetch(`${API_BASE_URL}/products/${id}`);
-        if (!response.ok) throw new Error("Error al obtener el producto");
+        const response = await fetch(`${API_BASE_URL}/api/products`);
+        if (!response.ok) throw new Error("Error al obtener productos");
         return await response.json();
     } catch (error) {
-        console.error(error);
-        return null;
-    }
-};
-
-export const fetchOffers = async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/offers`);
-        if (!response.ok) throw new Error("Error al obtener las ofertas");
-        return await response.json();
-    } catch (error) {
-        console.error(error);
+        console.error("Error en fetchProducts:", error);
         return [];
     }
-};
-
-export const fetchLatestProducts = async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/products/latest`);
-        if (!response.ok) throw new Error("Error al obtener los últimos productos");
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        return [];
-    }
-};
+}
