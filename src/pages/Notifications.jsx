@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { fetchNotifications } from "../services/api"; // ✅ Importación corregida
 
 function Notifications() {
     const [notifications, setNotifications] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {

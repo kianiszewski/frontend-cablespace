@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://backend-cablespace.onrender.com"; // Ajustar según tu backend
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://backend-cablespace.onrender.com"; // ✅ URL corregida
 
 export async function fetchNotifications() {
     try {
