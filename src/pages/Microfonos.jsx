@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function Microfonos() {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products?categoria=MICROFONOS")
+    axios.get(`${API_BASE_URL}/api/products?categoria=MICROFONOS`)
       .then((response) => setProductos(response.data))
       .catch((error) => console.error("Error al obtener productos de micrófonos:", error));
   }, []);

@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function Monitores() {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products?categoria=MONITORES")
+    axios.get(`${API_BASE_URL}/api/products?categoria=MONITORES`)
       .then((response) => setProductos(response.data))
       .catch((error) => console.error("Error al obtener productos de monitores:", error));
   }, []);

@@ -2,16 +2,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function Todo() {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/products") // No se filtra por estado
+    axios.get(`${API_BASE_URL}/api/products`)
       .then((response) => setProductos(response.data))
-      .catch((error) =>
-        console.error("Error al obtener todos los productos:", error)
-      );
+      .catch((error) => console.error("Error al obtener todos los productos:", error));
   }, []);
 
   return (
