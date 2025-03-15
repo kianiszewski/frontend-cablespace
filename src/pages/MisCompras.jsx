@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function MisCompras() {
   const { user, token } = useAuth();
   const [compras, setCompras] = useState([]);
@@ -10,10 +12,10 @@ function MisCompras() {
 
   useEffect(() => {
     if (!user || !token) return;
-    
+
     const fetchCompras = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/purchases/user/${user.id_usuario}`, {
+        const response = await axios.get(`${API_BASE_URL}/api/purchases/user/${user.id_usuario}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCompras(response.data);
