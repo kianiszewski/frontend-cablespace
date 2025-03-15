@@ -4,6 +4,8 @@ import { useAuth } from "../context/AuthContext";
 import ProductCard from "../components/ProductCard";
 import { Link } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function MisPublicaciones() {
   const { user } = useAuth();
   const [productos, setProductos] = useState([]);
@@ -15,7 +17,7 @@ function MisPublicaciones() {
 
     const fetchPublicaciones = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products?usuarioId=${user.id_usuario}`);
+        const response = await axios.get(`${API_BASE_URL}/api/products?usuarioId=${user.id_usuario}`);
         setProductos(response.data);
       } catch (error) {
         console.error("Error al obtener las publicaciones:", error);
