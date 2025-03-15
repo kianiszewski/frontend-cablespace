@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function ProductDetail() {
   const { id } = useParams();
   const { addToCart } = useCart();
@@ -13,7 +15,7 @@ function ProductDetail() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const productResponse = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const productResponse = await axios.get(`${API_BASE_URL}/api/products/${id}`);
         setProduct(productResponse.data);
         if (productResponse.data.imagenes?.length > 0) {
           setSelectedImage(productResponse.data.imagenes[0]);
