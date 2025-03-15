@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function CrearPublicacion() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -18,7 +20,8 @@ function CrearPublicacion() {
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/categorias")
+    axios
+      .get(`${API_BASE_URL}/api/categorias`)
       .then((response) => setCategorias(response.data))
       .catch((error) => console.error("Error obteniendo categorías:", error));
   }, []);
@@ -59,7 +62,7 @@ function CrearPublicacion() {
         imagenes: imagenesValidas,
       };
 
-      await axios.post("http://localhost:5000/api/products", productoData, {
+      await axios.post(`${API_BASE_URL}/api/products`, productoData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
