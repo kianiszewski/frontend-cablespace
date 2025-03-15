@@ -1,11 +1,12 @@
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
+import { toast } from "react-toastify";
 
 function Cart() {
   const { cart, removeFromCart, clearCart, handleCompra } = useCart();
 
-  // 🔹 Calcular el total del carrito usando useMemo para optimización
+  // 🔹 Calcular el total del carrito con useMemo para optimización
   const totalCarrito = useMemo(() => {
     return cart.reduce((total, item) => total + (item.precio || 0) * item.cantidad, 0);
   }, [cart]);
@@ -83,7 +84,10 @@ function Cart() {
               marginTop: "1rem",
               marginLeft: "10px",
             }}
-            onClick={handleCompra}
+            onClick={() => {
+              console.log("🛒 Botón de comprar presionado"); // 🔍 Debugging
+              handleCompra();
+            }}
           >
             Comprar
           </button>
