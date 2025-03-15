@@ -1,8 +1,18 @@
-# React + Vite
+Deploy realizado con exito en RENDER. LINKS de interes se encuentran a continuación para su revisión
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Database - Deploy: postgresql://db_cablespace_user:ueNfB3IQ8fVYswEtsz6UbcWJKrkc3WqS@dpg-cv9mu4dumphs73a95tdg-a.oregon-postgres.render.com/db_cablespace
+Database - Hostname: dpg-cv9mu4dumphs73a95tdg-a
+Database: db_cablespace
+Database - Username: db_cablespace_user
+Database - Password: ueNfB3IQ8fVYswEtsz6UbcWJKrkc3WqS
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Backend - Deploy: https://backend-cablespace.onrender.com
+Backend - Name: backend-cablespace
+Backend - Repositorio Github: https://github.com/kianiszewski/backend-cablespace
+
+
+Frontend - Deploy: https://frontend-cablespace.onrender.com
+Frontend - Name: frontend-cablespace
+Frontend - Repositorio Github: https://github.com/kianiszewski/frontend-cablespace
+
