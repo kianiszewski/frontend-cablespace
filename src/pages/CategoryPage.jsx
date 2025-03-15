@@ -3,13 +3,15 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function CategoryPage() {
   const { categoria } = useParams();
   const [productos, setProductos] = useState([]);
-  const [orden, setOrden] = useState(""); 
+  const [orden, setOrden] = useState("");
 
   useEffect(() => {
-    let url = "http://localhost:5000/api/products";
+    let url = `${API_BASE_URL}/api/products`;
 
     if (categoria.toUpperCase() === "USADOS" || categoria.toUpperCase() === "NUEVOS") {
       url += `?estado=${categoria.toUpperCase()}`;
