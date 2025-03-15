@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function Register() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -22,7 +24,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await axios.post(`${API_BASE_URL}/api/auth/register`, {
         nombre,
         email,
         contraseña: password,
