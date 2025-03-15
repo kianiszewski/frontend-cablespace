@@ -10,109 +10,120 @@ const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-    const { user, token, isAuthenticated } = useAuth();
-    const navigate = useNavigate();
-    const [cart, setCart] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const { user, token, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (isAuthenticated && user?.id_usuario) {
-            fetchCart();
-        }
-    }, [isAuthenticated, user]);
+  useEffect(() => {
+    if (isAuthenticated && user?.id_usuario) {
+      fetchCart();
+    }
+  }, [isAuthenticated, user]);
 
-    const fetchCart = async () => {
-        if (!token) return;
+  const fetchCart = async () => {
+    if (!token) return;
 
-        try {
-            const response = await axios.get(`${API_BASE_URL}/api/cart`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setCart(response.data || []);
-        } catch (error) {
-            console.error("Error al cargar el carrito:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCart(response.data || []);
+    } catch (error) {
+      console.error("Error al cargar el carrito:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const addToCart = async (product) => {
-        if (!isAuthenticated || !user?.id_usuario || !token) return;
+  const addToCart = async (product) => {
+    if (!isAuthenticated || !user?.id_usuario || !token) return;
 
-        try {
-            await axios.post(
-                `${API_BASE_URL}/api/cart`,
-                {
-                    id_usuario: user.id_usuario,
-                    id_producto: product.id_producto,
-                    cantidad: 1,
-                },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+    try {
+      await axios.post(
+        `${API_BASE_URL}/api/cart`,
+        {
+          id_usuario: user.id_usuario,
+          id_producto: product.id_producto,
+          cantidad: 1,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-            fetchCart();
-        } catch (error) {
-            console.error("Error al agregar producto al carrito:", error);
-        }
-    };
+      fetchCart();
+    } catch (error) {
+      console.error("Error al agregar producto al carrito:", error);
+    }
+  };
 
-    const removeFromCart = async (id_producto) => {
-        if (!isAuthenticated || !user?.id_usuario || !token) return;
+  const removeFromCart = async (id_producto) => {
+    if (!isAuthenticated || !user?.id_usuario || !token) return;
 
-        try {
-            await axios.delete(`${API_BASE_URL}/api/cart/item`, {
-                data: { id_usuario: user.id_usuario, id_producto },
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            fetchCart();
-        } catch (error) {
-            console.error("Error al eliminar producto del carrito:", error);
-        }
-    };
+    try {
+      await axios.delete(`${API_BASE_URL}/api/cart/item`, {
+        data: { id_usuario: user.id_usuario, id_producto },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchCart();
+    } catch (error) {
+      console.error("Error al eliminar producto del carrito:", error);
+    }
+  };
 
-    const clearCart = async () => {
-        if (!isAuthenticated || !user?.id_usuario || !token) return;
+  const clearCart = async () => {
+    if (!isAuthenticated || !user?.id_usuario || !token) return;
 
-        try {
-            await axios.delete(`${API_BASE_URL}/api/cart`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            fetchCart();
-        } catch (error) {
-            console.error("Error al vaciar el carrito:", error);
-        }
-    };
+    try {
+      await axios.delete(`${API_BASE_URL}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchCart();
+    } catch (error) {
+      console.error("Error al vaciar el carrito:", error);
+    }
+  };
 
-    // ✅ Función para realizar la compra
-    const handleCompra = async () => {
-        if (!isAuthenticated || !user?.id_usuario || !token) {
-            console.error("🔴 Usuario no autenticado");
-            return;
-        }
+  // ✅ Función para realizar la compra (implementando la lógica original)
+  const handleCompra = async () => {
+    if (!isAuthenticated || !user?.id_usuario || !token) {
+      alert("Debes iniciar sesión para comprar.");
+      return;
+    }
 
-        console.log("🚀 Ejecutando handleCompra...");
+    const metodoSeleccionado = 1; // ID de PayPal (dato fijo)
 
-        try {
-            const response = await axios.post(
-                `${API_BASE_URL}/api/purchases`,
-                { id_usuario: user.id_usuario },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+    console.log("🚀 Ejecutando handleCompra...");
 
-            console.log("✅ Compra realizada con éxito:", response.data);
-            toast.success("Compra realizada con éxito 🎉");
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/purchases`,
+        {
+          id_usuario: user.id_usuario,
+          productos: cart.map((item) => ({
+            id_producto: item.id_producto,
+            cantidad: item.cantidad,
+          })),
+          id_metodo: metodoSeleccionado,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-            clearCart(); // Vaciar carrito después de comprar
-            navigate("/profile/mis-compras"); // Redirigir a historial de compras
-        } catch (error) {
-            console.error("❌ Error al realizar la compra:", error);
-            toast.error("Hubo un problema al procesar la compra.");
-        }
-    };
+      console.log("✅ Compra realizada con éxito:", response.data);
+      toast.success("Compra realizada con éxito 🎉");
 
-    return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, handleCompra, loading }}>
-            {children}
-        </CartContext.Provider>
-    );
+      clearCart(); // Vaciar carrito después de comprar
+      setTimeout(() => {
+        navigate("/profile"); // ✅ Redirige correctamente al perfil
+      }, 2000);
+    } catch (error) {
+      console.error("❌ Error al realizar la compra:", error);
+      alert("Error al realizar la compra. Inténtalo de nuevo.");
+    }
+  };
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, handleCompra, loading }}>
+      {children}
+    </CartContext.Provider>
+  );
 };
