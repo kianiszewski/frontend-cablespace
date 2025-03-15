@@ -4,18 +4,18 @@ import ProductCard from "../components/ProductCard";
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-function Monitores() {
+function Microfonos() {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/api/products?categoria=MONITORES`)
+    axios.get(`${API_BASE_URL}/api/products?categoria=MICROFONOS`)
       .then((response) => setProductos(response.data))
-      .catch((error) => console.error("Error al obtener productos de monitores:", error));
+      .catch((error) => console.error("Error al obtener productos de micrófonos:", error));
   }, []);
 
   return (
     <div className="container mt-5">
-      <h2 className="text-white text-center">Monitores e Interfaces de Audio</h2>
+      <h2 className="text-white text-center">Micrófonos y Equipos de Grabación</h2>
       <div className="row mt-4">
         {productos.length === 0 ? (
           <p className="text-center text-white">No hay productos en esta categoría.</p>
@@ -31,4 +31,4 @@ function Monitores() {
   );
 }
 
-export default Monitores;
+export default Microfonos;
