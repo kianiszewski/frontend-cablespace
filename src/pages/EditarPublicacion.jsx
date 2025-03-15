@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 function EditarPublicacion() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -20,12 +22,12 @@ function EditarPublicacion() {
 
   useEffect(() => {
     // Obtener categorías
-    axios.get("http://localhost:5000/api/categorias")
+    axios.get(`${API_BASE_URL}/api/categorias`)
       .then((response) => setCategorias(response.data))
       .catch(() => setCategorias([])); // Evitar error si no hay categorías
 
     // Obtener datos del producto
-    axios.get(`http://localhost:5000/api/products/${id}`)
+    axios.get(`${API_BASE_URL}/api/products/${id}`)
       .then((response) => {
         const producto = response.data;
         setNombre(producto.nombre || "");
@@ -72,7 +74,7 @@ function EditarPublicacion() {
         imagenes: imagenesValidas, // Enviar URLs de imágenes formateadas
       };
 
-      await axios.put(`http://localhost:5000/api/products/${id}`, productoData, {
+      await axios.put(`${API_BASE_URL}/api/products/${id}`, productoData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
