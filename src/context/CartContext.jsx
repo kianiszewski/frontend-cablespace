@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL; // ✅ URL del backend dinámico
+const API_BASE_URL = "https://backend-cablespace.onrender.com"; // ✅ URL corregida
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
@@ -21,7 +21,6 @@ export const CartProvider = ({ children }) => {
         }
     }, [isAuthenticated, user]);
 
-    // 🔹 Cargar carrito del usuario
     const fetchCart = async () => {
         if (!token) return;
 
@@ -37,7 +36,6 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    // 🔹 Agregar producto al carrito
     const addToCart = async (product) => {
         if (!isAuthenticated || !user?.id_usuario || !token) return;
 
@@ -53,14 +51,11 @@ export const CartProvider = ({ children }) => {
             );
 
             fetchCart();
-            toast.success("Producto agregado al carrito 🛒");
         } catch (error) {
             console.error("Error al agregar producto al carrito:", error);
-            toast.error("❌ No se pudo agregar al carrito.");
         }
     };
 
-    // 🔹 Eliminar un producto del carrito
     const removeFromCart = async (id_producto) => {
         if (!isAuthenticated || !user?.id_usuario || !token) return;
 
@@ -69,16 +64,12 @@ export const CartProvider = ({ children }) => {
                 data: { id_usuario: user.id_usuario, id_producto },
                 headers: { Authorization: `Bearer ${token}` },
             });
-
             fetchCart();
-            toast.info("Producto eliminado del carrito 🗑");
         } catch (error) {
             console.error("Error al eliminar producto del carrito:", error);
-            toast.error("❌ No se pudo eliminar el producto.");
         }
     };
 
-    // 🔹 Vaciar el carrito completo
     const clearCart = async () => {
         if (!isAuthenticated || !user?.id_usuario || !token) return;
 
@@ -86,42 +77,36 @@ export const CartProvider = ({ children }) => {
             await axios.delete(`${API_BASE_URL}/api/cart`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
             fetchCart();
-            toast.success("Carrito vaciado correctamente 🛒");
         } catch (error) {
             console.error("Error al vaciar el carrito:", error);
-            toast.error("❌ No se pudo vaciar el carrito.");
         }
     };
 
-    // 🔹 Realizar la compra
+    // ✅ Función para realizar la compra
     const handleCompra = async () => {
         if (!isAuthenticated || !user?.id_usuario || !token) {
-            toast.error("⚠ Debes iniciar sesión para comprar.");
+            console.error("🔴 Usuario no autenticado");
             return;
         }
 
-        if (cart.length === 0) {
-            toast.warning("🛒 No hay productos en el carrito.");
-            return;
-        }
-
-        console.log("Ejecutando handleCompra..."); // 🔍 Verificación en consola
+        console.log("🚀 Ejecutando handleCompra...");
 
         try {
             const response = await axios.post(
                 `${API_BASE_URL}/api/purchases`,
-                { cart },
+                { id_usuario: user.id_usuario },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            toast.success("✅ Compra realizada con éxito.");
-            setCart([]); // 🛒 Vaciar carrito tras la compra
-            navigate("/profile/mis-compras");
+            console.log("✅ Compra realizada con éxito:", response.data);
+            toast.success("Compra realizada con éxito 🎉");
+
+            clearCart(); // Vaciar carrito después de comprar
+            navigate("/profile/mis-compras"); // Redirigir a historial de compras
         } catch (error) {
             console.error("❌ Error al realizar la compra:", error);
-            toast.error("No se pudo completar la compra.");
+            toast.error("Hubo un problema al procesar la compra.");
         }
     };
 
